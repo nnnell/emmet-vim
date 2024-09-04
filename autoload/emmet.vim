@@ -380,7 +380,14 @@ function! emmet#getFileType(...) abort
   endif 
 
   if get(g:, 'loaded_nvim_treesitter', 0)
-    let type = luaeval('require"emmet_utils".get_node_at_cursor()')
+    let current_buf = luaeval('vim.api.nvim_get_current_buf()')
+    let is_ts = luaeval('require"utils".is_ts_node()')
+    if string(is_ts) == 'v:false'
+      let pos = emmet#util#getcurpos()
+      let type = synIDattr(synID(max([pos[1], 1]), max([pos[2], 1]), 1), 'name')
+    else
+      let type = luaeval('require"emmet_utils".get_node_at_cursor()')
+    endif
   else
     let pos = emmet#util#getcurpos()
     let type = synIDattr(synID(max([pos[1], 1]), max([pos[2], 1]), 1), 'name')
