@@ -1,5 +1,16 @@
 local M = {}
 
+M.is_ts_node = function()
+	local ts_utils = require("nvim-treesitter.ts_utils")
+	local node = ts_utils.get_node_at_cursor()
+	if not node then
+		return false
+	else
+		return true
+	end
+end
+
+
 M.get_node_at_cursor = function()
 	local ts_utils = require("nvim-treesitter.ts_utils")
 	local node = ts_utils.get_node_at_cursor()
